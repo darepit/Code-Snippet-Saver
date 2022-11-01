@@ -1,0 +1,61 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  password  String
+
+  authoredSnippets Snippet[]  @relation("AuthoredSnippets")
+  snippets         Snippet[]  @relation("RecievedSnippets")
+  profile       Profile
+
+}
+
+model Snippet {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  message     String
+  createdAt   DateTime   @default(now())
+  style       SnippetStyle?
+  author      User       @relation(references: [id], fields: [authorId], onDelete: Cascade, "AuthoredSnippets")
+  authorId    String     @db.ObjectId
+  recipient   User       @relation(references: [id], fields: [recipientId], "RecievedSnippets")
+  recipientId String     @db.ObjectId
+}
+
+type Profile {
+  firstName      String
+  lastName       String
+  profilePicture String?
+}
+
+type SnippetStyle {
+  backgroundColor Color @default(YELLOW)
+  textColor       Color @default(WHITE)
+  lang           Lang @default(JAVASCRIPT)
+}
+
+enum Lang {
+  JAVASCRIPT
+  PHP
+  PYTHON
+}
+
+
+enum Color {
+  RED
+  GREEN
+  YELLOW
+  BLUE
+  WHITE
+}

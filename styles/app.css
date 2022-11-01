@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.h-300 {
+    height:auto;
+    max-height: 300px;
+    overflow-y: scroll;
+  }
+
+  .h-screen1 {
+    height: 100%;
+    min-height: 100vmin;
+  }
+
+
+.w-snippet {
+  width: 100%;
+  position: center;
+}
